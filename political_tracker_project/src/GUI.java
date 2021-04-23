@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,36 +14,40 @@ public class GUI implements ActionListener {
 	private static JTextField userText;
 	private static JPasswordField passwordText;
 	private String func;
-	private boolean testGUI = true; // set to true to just test guy set to false to test actual
+	//private boolean testGUI = true; set to true to just test guy set to false to test actual
 									// connectivity/functionality
+	static DatabaseConnection dbConnection = new DatabaseConnection();
+	private UserLoginAndRegister logger = new UserLoginAndRegister(dbConnection);
 
 	public GUI(String func) {
 		this.func = func;
 	}
 
 	public void loginClicked(String user, String password) {
+		System.out.printf("username: %s\n", user);
+		System.out.printf("password: %s\n", password);
 
-		// !!!---you would call login function of UserService Here---
-
-		if (testGUI)
+		if (logger.login1(user, password)) {
 			JOptionPane.showMessageDialog(null,
 					" You logged in as user: " + user + ", with password: " + password + " \n");
-
+		}
 	}
 
 	public void registerClicked(String user, String password) {
-		// !!!---you would call register function of UserService Here---
-
-		if (testGUI)
+		String email = "test123@gmail.com";
+		System.out.printf("username: %s\n", user);
+		System.out.printf("password: %s\n", password);
+		if (logger.register(user, email, password)) {
 			JOptionPane.showMessageDialog(null,
 					" You registered a new user: " + user + ", with password: " + password + " \n");
+		}
 
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
 
 		String user = userText.getText();
-		String password = passwordText.getText();
+		String password = new String(passwordText.getPassword());
 		userText.setText(null);
 		passwordText.setText(null);
 		if (this.func.equals("Login")) {
@@ -52,11 +57,10 @@ public class GUI implements ActionListener {
 			registerClicked(user, password);
 		}
 
-		// TODO Auto-generated method stub
-
 	}
 
 	public static void main(String[] args) {
+		dbConnection.getConnected();
 		JFrame frame = new JFrame();
 		frame.setSize(500, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,6 +99,8 @@ public class GUI implements ActionListener {
 
 		frame.add(panel);
 		frame.setVisible(true);
+		
+
 
 	}
 
