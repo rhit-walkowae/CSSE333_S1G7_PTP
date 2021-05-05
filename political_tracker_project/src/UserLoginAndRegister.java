@@ -68,7 +68,6 @@ public class UserLoginAndRegister {
 		
 
 		public boolean register(String username, String email, String password) {
-			//DONE: Task 6
 			byte[] userSalt = getNewSalt();
 			String hashedPass = hashPassword(userSalt, password);
 			try {	

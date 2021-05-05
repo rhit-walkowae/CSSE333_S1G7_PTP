@@ -114,6 +114,7 @@ public class GUI implements ActionListener {
 		registerbutton.addActionListener(new GUI("Register"));
 		panel.add(registerbutton);
 
+		frame.setLocationRelativeTo(null);
 		frame.add(panel);
 		frame.setVisible(true);
 		
