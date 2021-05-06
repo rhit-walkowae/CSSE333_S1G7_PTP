@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 
 public class GUI implements ActionListener {
 	private static JTextField userText;
+	private static JTextField emailText;
 	private static JPasswordField passwordText;
 	private String func;
 	//private boolean testGUI = true; set to true to just test guy set to false to test actual
@@ -33,8 +34,8 @@ public class GUI implements ActionListener {
 		}
 	}
 
-	public void registerClicked(String user, String password) {
-		String email = "test123@gmail.com";
+	public void registerClicked(String user, String password, String email) {
+		//String email = "andrewtest@gmail.com";
 		System.out.printf("username: %s\n", user);
 		System.out.printf("password: %s\n", password);
 		if (logger.register(user, email, password)) {
@@ -48,13 +49,15 @@ public class GUI implements ActionListener {
 
 		String user = userText.getText();
 		String password = new String(passwordText.getPassword());
+		String email = emailText.getText();
 		userText.setText(null);
 		passwordText.setText(null);
+		emailText.setText(null);
 		if (this.func.equals("Login")) {
 			loginClicked(user, password);
 		}
 		if (this.func.equals("Register")) {
-			registerClicked(user, password);
+			registerClicked(user, password, email);
 		}
 
 	}
@@ -75,28 +78,43 @@ public class GUI implements ActionListener {
 		userText.setBounds(100, 20, 165, 25);
 		userText.setVisible(true);
 		panel.add(userText);
+		
+		
+		JLabel emailLabel = new JLabel("Email:");
+		emailLabel.setBounds(20, 60, 80, 25);
+		panel.add(emailLabel);
+		
+		JLabel nullLabel = new JLabel("(can be null for login)");
+		nullLabel.setBounds(20, 80, 120, 25);
+		panel.add(nullLabel);
+
+		emailText = new JTextField(20);
+		emailText.setBounds(100, 60, 165, 25);
+		emailText.setVisible(true);
+		panel.add(emailText);
 
 		JLabel passwordlabel = new JLabel("Password");
-		passwordlabel.setBounds(20, 60, 80, 25);
+		passwordlabel.setBounds(20, 120, 80, 25);
 		panel.add(passwordlabel);
 
 		passwordText = new JPasswordField(20);
-		passwordText.setBounds(100, 60, 165, 25);
+		passwordText.setBounds(100, 120, 165, 25);
 		passwordText.setVisible(true);
 		panel.add(passwordText);
 
 		JButton loginbutton = new JButton("Login");
-		loginbutton.setBounds(20, 100, 80, 25);
+		loginbutton.setBounds(20, 160, 80, 25);
 		loginbutton.addActionListener(new GUI("Login") {
 
 		});
 		panel.add(loginbutton);
 
 		JButton registerbutton = new JButton("Register");
-		registerbutton.setBounds(120, 100, 120, 25);
+		registerbutton.setBounds(120, 160, 120, 25);
 		registerbutton.addActionListener(new GUI("Register"));
 		panel.add(registerbutton);
 
+		frame.setLocationRelativeTo(null);
 		frame.add(panel);
 		frame.setVisible(true);
 		
