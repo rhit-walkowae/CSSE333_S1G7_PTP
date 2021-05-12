@@ -1,6 +1,9 @@
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -9,21 +12,40 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 public class PoliticalTrackerTable extends JFrame  {
 	
 	static DatabaseConnection dbConnection = new DatabaseConnection();
-	private FilterOrderService filter = new FilterOrderService(dbConnection);
+	private FilterOrderService pols = new FilterOrderService(dbConnection);
 	
 	private static JTextField userText;
 	private static JTextField titleText;
 	private static JCheckBox titleFilter; 
 	
 	private static String[] filters = {"Title", "Publisher", "Author", "Genre", "Score"};
+	private static String[] header = {"Title","Link","Date","Author", "Publisher", "Genre", "Score"};
+	private static String[][] rows = {{"Title","Link","Date","Author", "Publisher", "Genre", "Score"}};
+	private static JTable table =  new JTable(new DefaultTableModel(rows,header));
+	
 
 	public PoliticalTrackerTable() {
-		//this.dbConnection.getConnected();	
+		this.dbConnection.getConnected();	
+		
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model.setRowCount((int) 0);
+		
+		ArrayList<String[]> newRows = pols.FilterBY(0,null);
+		for(int i =0; i<newRows.size();i++) {
+			model.addRow(newRows.get(i));
+		}
+
+
+		
+		
 		
 		JFrame frame = new JFrame();
 		frame.setSize(1000, 400);
@@ -51,52 +73,48 @@ public class PoliticalTrackerTable extends JFrame  {
 		
 		JButton search = new JButton("Search");
 		search.setBounds(890, 10, 80, 20);
+		search.addActionListener(new ActionListener() {
 
-/*create functionality to take name of column as table name and run filter against that
- * 
-		search.addActionListener(new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int titleFlag = 0;
-				if(possibleFilters.getSelectedItem().equals(filters[0])) {
-					filter.FilterBY(titleFlag, titleText.getText());
-			
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				model.setRowCount((int) 0);
+				
+				ArrayList<String[]> newRows = pols.FilterBY(0,null);
+				for(int i =0; i<newRows.size();i++) {
+					model.addRow(newRows.get(i));
 				}
+				
 			}
-		}); */
+			
+		});
 		panel.add(search);
 		
-		JLabel tLabel = new JLabel("Title");
-		tLabel.setBounds(50, 40, 50, 20);
-		panel.add(tLabel);
 		
-		JLabel dLabel = new JLabel("Date");
-		dLabel.setBounds(120, 40, 50, 20);
-		panel.add(dLabel);
 		
-		JLabel aLabel = new JLabel("Author");
-		aLabel.setBounds(190, 40, 50, 20);
-		panel.add(aLabel);
+		table.addMouseListener(new java.awt.event.MouseAdapter() {
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+		        int rowT = table.rowAtPoint(evt.getPoint());
+		        int colT = table.columnAtPoint(evt.getPoint());
+		        if (colT == 3) {
+		        	//Author clicked!!!
+		            System.out.println(table.getValueAt(rowT, colT));
+		        }
+		        if (colT == 4) {
+		        	//Publisher clicked!!!
+		            System.out.println(table.getValueAt(rowT, colT));
+		        }
+		        
+		    }
+		});
 		
-		JLabel pLabel = new JLabel("Publisher");
-		pLabel.setBounds(260, 40, 70, 20);
-		panel.add(pLabel);
+		JScrollPane tablePane = new JScrollPane(table);
+		tablePane.setBounds(50,40,900,200);
+		tablePane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		panel.add(tablePane);
 		
-		JLabel linkLabel = new JLabel("Link");
-		linkLabel.setBounds(350, 40, 50, 20);
-		panel.add(linkLabel);
-		
-		JLabel sLabel = new JLabel("Score");
-		sLabel.setBounds(420, 40, 50, 20);
-		panel.add(sLabel);
-		
-		JLabel gLabel = new JLabel("Genre");
-		gLabel.setBounds(490, 40, 50, 20);
-		panel.add(gLabel);
-		
-		JButton rateMe = new JButton("Rate");
-		rateMe.setBounds(580, 70, 70, 20);
-		panel.add(rateMe);
+		//new article
 		
 		JButton addNewArticle = new JButton("Rate a New Article");
 		addNewArticle.setBounds(800, 300, 140, 20);
