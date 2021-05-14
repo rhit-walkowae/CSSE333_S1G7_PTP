@@ -49,7 +49,8 @@ public class FilterOrderService {
 
 				// temp should go "Title","Link","Date","Author", "Publisher", "Genre", "Score"
 				String[] temp = {rs.getString(titleIndex), rs.getString(linkIndex),rs.getString(datePublishedIndex), 
-						rs.getString(authorIndex),rs.getString(publisherIndex),rs.getString(genreIndex),rs.getString(scoreIndex)};
+						rs.getString(authorIndex),rs.getString(publisherIndex),
+						rs.getString(genreIndex),rs.getString(scoreIndex),"RateMe"};
 				rows.add(temp );
 
 				

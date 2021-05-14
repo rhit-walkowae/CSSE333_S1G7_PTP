@@ -27,8 +27,8 @@ public class PoliticalTrackerTable extends JFrame  {
 	private static JCheckBox titleFilter; 
 	
 	private static String[] filters = {"Title", "Publisher", "Author", "Genre", "Score"};
-	private static String[] header = {"Title","Link","Date","Author", "Publisher", "Genre", "Score"};
-	private static String[][] rows = {{"Title","Link","Date","Author", "Publisher", "Genre", "Score"}};
+	private static String[] header = {"Title","Link","Date","Author", "Publisher", "Genre", "Score", ""};
+	private static String[][] rows = {{"Title","Link","Date","Author", "Publisher", "Genre", "Score", "RateMe"}};
 	private static JTable table =  new JTable(new DefaultTableModel(rows,header));
 	
 
@@ -70,9 +70,28 @@ public class PoliticalTrackerTable extends JFrame  {
 		titleText.setBounds(770, 10, 100, 20);
 		titleText.setVisible(true);
 		panel.add(titleText);
+		JButton andFilter = new JButton("And");
+		andFilter.setBounds(890, 10, 80, 20);
+		andFilter.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				model.setRowCount((int) 0);
+				
+				ArrayList<String[]> newRows = pols.FilterBY(0,null);
+				for(int i =0; i<newRows.size();i++) {
+					model.addRow(newRows.get(i));
+				}
+				
+			}
+			
+		});
+		panel.add(andFilter);
+		
 		
 		JButton search = new JButton("Search");
-		search.setBounds(890, 10, 80, 20);
+		search.setBounds(890, 35, 80, 20);
 		search.addActionListener(new ActionListener() {
 
 			@Override
@@ -105,12 +124,15 @@ public class PoliticalTrackerTable extends JFrame  {
 		        	//Publisher clicked!!!
 		            System.out.println(table.getValueAt(rowT, colT));
 		        }
+		        if(colT == 7) {
+		        	System.out.println("rate me called on title:"+ table.getValueAt(rowT, 0));
+		        }
 		        
 		    }
 		});
 		
 		JScrollPane tablePane = new JScrollPane(table);
-		tablePane.setBounds(50,40,900,200);
+		tablePane.setBounds(50,80,900,200);
 		tablePane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		panel.add(tablePane);
 		
