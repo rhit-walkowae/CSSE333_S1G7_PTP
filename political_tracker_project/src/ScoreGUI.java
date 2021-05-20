@@ -17,8 +17,8 @@ import javax.swing.JTextField;
 
 public class ScoreGUI extends JFrame{
 	
-	private JLabel author, title, link, publisher, rating;
-	private JTextArea inputAuthor, inputTitle, inputLink, inputPublisher;
+	private JLabel author, title, link, publisher, rating, genre;
+	private JTextArea inputAuthor, inputTitle, inputLink, inputPublisher, inputGenre;
 	private JRadioButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10;
 	private JButton submit;
 	private JPanel panel;
@@ -26,7 +26,8 @@ public class ScoreGUI extends JFrame{
 	static DatabaseConnection dbConnection = new DatabaseConnection();
 	private static Scores scoresCall = new Scores(dbConnection);
 	
-	public ScoreGUI() {
+	public ScoreGUI(String titleBeingRated, String publisherBeingRated, String authorBeingRated, String genreOf, String linkOfArticle) {
+		
 		this.setTitle("Add Score");
 		
 		this.panel = new JPanel();
@@ -34,24 +35,12 @@ public class ScoreGUI extends JFrame{
 		this.author = new JLabel("Author");
 		this.title = new JLabel("Title");
 		this.link = new JLabel("Link");
+		this.genre = new JLabel("Genre");
 		this.publisher = new JLabel("Publisher");
 		this.rating = new JLabel("Rating");
 		
-		this.inputAuthor = new JTextArea();
-		this.inputTitle = new JTextArea();
-		this.inputLink = new JTextArea();
-		this.inputPublisher = new JTextArea();
-
-		author.setBounds(20, 20, 100, 20);
-		title.setBounds(20, 60, 100, 20);
-		link.setBounds(20, 100, 100, 20);
-		publisher.setBounds(20, 140, 100, 20);
-		rating.setBounds(20, 180, 100, 20);
-		
-		inputAuthor.setBounds(100, 20, 400, 20);
-		inputTitle.setBounds(100, 60, 400, 20);
-		inputLink.setBounds(100, 100, 400, 20);
-		inputPublisher.setBounds(100, 140, 400, 20);
+		this.submit = new JButton("Submit");
+		this.submit.setBounds(140, 280, 300, 20);;
 		
 		ButtonGroup group = new ButtonGroup();
 		JPanel radioPanel = new JPanel();
@@ -78,35 +67,93 @@ public class ScoreGUI extends JFrame{
 		group.add(b9);
 		group.add(b10);
 		
-		this.submit = new JButton("Submit");
-		this.submit.setBounds(140, 240, 300, 20);;
-		this.submit.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				String authorNames = inputAuthor.getText();
-				String linkInput = inputLink.getText();
-				String pub = inputPublisher.getText();
-				int score = 0;
-				for (Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements();) {
-				        AbstractButton button = buttons.nextElement();
-				        if (button.isSelected()) {
-				                score = Integer.parseInt(button.getText());
-				        }
-				    }
-				if(authorNames != null && linkInput != null && pub != null && score != 0) {
-					String[] parts = authorNames.split(" ");
-					String authorFName = parts[0];
-					String authorLName = parts[1];
-					scoresCall.AddScore(score, linkInput, authorFName, authorLName, pub);
-				}
-			} 
+		if(titleBeingRated == null) {
 			
-		});
+			this.inputAuthor = new JTextArea();
+			this.inputTitle = new JTextArea();
+			this.inputLink = new JTextArea();
+			this.inputGenre = new JTextArea();
+			this.inputPublisher = new JTextArea();
+			
+			
+			this.submit.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					String authorNames = inputAuthor.getText();
+					String linkInput = inputLink.getText();
+					String pub = inputPublisher.getText();
+					String gen = inputGenre.getText();
+					String tit = inputTitle.getText();
+					int score = 0;
+					for (Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements();) {
+						AbstractButton button = buttons.nextElement();
+						if (button.isSelected()) {
+							score = Integer.parseInt(button.getText());
+						}
+					}
+					if(authorNames != null && linkInput != null && pub != null && score != 0) {
+						String[] parts = authorNames.split(" ");
+						String authorFName = parts[0];
+						String authorLName = parts[1];
+						scoresCall.AddScore(score, linkInput, authorFName, authorLName, pub, tit, gen);
+					}
+					dispose();
+					new PoliticalTrackerTable();
+				} 
+				
+			});
+			
+			
+		} else {
+			
+			this.inputAuthor = new JTextArea(authorBeingRated);
+			this.inputTitle = new JTextArea(titleBeingRated);
+			this.inputLink = new JTextArea(linkOfArticle);
+			this.inputGenre = new JTextArea(genreOf);
+			this.inputPublisher = new JTextArea(publisherBeingRated);
+			
+			this.submit.addActionListener(new ActionListener() {
+				
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					int score = 0;
+					for (Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements();) {
+						AbstractButton button = buttons.nextElement();
+						if (button.isSelected()) {
+							score = Integer.parseInt(button.getText());
+						}
+					}
+					if(authorBeingRated != null && titleBeingRated != null && publisherBeingRated != null && score != 0) {
+						String[] parts = authorBeingRated.split(" ");
+						String authorFName = parts[0];
+						String authorLName = parts[1];
+						scoresCall.AddScore(score, linkOfArticle, authorFName, authorLName, publisherBeingRated, titleBeingRated, genreOf);
+					}
+					dispose();
+					new PoliticalTrackerTable();
+				} 
+				
+			});
+		}
+		
+		author.setBounds(20, 20, 100, 20);
+		title.setBounds(20, 60, 100, 20);
+		link.setBounds(20, 100, 100, 20);
+		publisher.setBounds(20, 140, 100, 20);
+		rating.setBounds(20, 180, 100, 20);
+		genre.setBounds(20, 220, 100, 20);
+		
+		inputAuthor.setBounds(100, 20, 400, 20);
+		inputTitle.setBounds(100, 60, 400, 20);
+		inputLink.setBounds(100, 100, 400, 20);
+		inputGenre.setBounds(100, 180, 400, 20);
+		inputPublisher.setBounds(100, 140, 400, 20);
 		
 		panel.setBounds(50, 220, 500, 100);
 		
-		radioPanel.setBounds(100, 170, 400, 50);
+		radioPanel.setBounds(100, 220, 400, 50);
 		
 		radioPanel.add(b1);
 		radioPanel.add(b2);
@@ -120,7 +167,7 @@ public class ScoreGUI extends JFrame{
 		radioPanel.add(b10);
 		
 		this.add(submit);
-
+		
 		this.add(author);
 		this.add(title);
 		this.add(link);
@@ -131,7 +178,7 @@ public class ScoreGUI extends JFrame{
 		this.add(inputTitle);
 		this.add(inputLink);
 		this.add(inputPublisher);
-
+		
 		this.add(radioPanel);
 		this.add(panel);
 		
@@ -139,6 +186,6 @@ public class ScoreGUI extends JFrame{
 		this.setLayout(null);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
-	}
+	} 
 	
 }

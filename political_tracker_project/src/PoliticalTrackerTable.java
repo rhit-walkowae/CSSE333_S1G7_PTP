@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -20,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 public class PoliticalTrackerTable extends JFrame  {
 	
 	static DatabaseConnection dbConnection = new DatabaseConnection();
+	Connection connection;
 	private FilterOrderService pols = new FilterOrderService(dbConnection);
 	
 	private static JTextField userText;
@@ -33,7 +35,7 @@ public class PoliticalTrackerTable extends JFrame  {
 	
 
 	public PoliticalTrackerTable() {
-		this.dbConnection.getConnected();	
+		this.connection = dbConnection.getConnected();	
 		
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setRowCount((int) 0);
@@ -42,10 +44,6 @@ public class PoliticalTrackerTable extends JFrame  {
 		for(int i =0; i<newRows.size();i++) {
 			model.addRow(newRows.get(i));
 		}
-
-
-		
-		
 		
 		JFrame frame = new JFrame();
 		frame.setSize(1000, 400);
@@ -83,12 +81,9 @@ public class PoliticalTrackerTable extends JFrame  {
 				for(int i =0; i<newRows.size();i++) {
 					model.addRow(newRows.get(i));
 				}
-				
 			}
-			
 		});
 		panel.add(andFilter);
-		
 		
 		JButton search = new JButton("Search");
 		search.setBounds(890, 35, 80, 20);
@@ -102,14 +97,10 @@ public class PoliticalTrackerTable extends JFrame  {
 				ArrayList<String[]> newRows = pols.FilterBY(0,null);
 				for(int i =0; i<newRows.size();i++) {
 					model.addRow(newRows.get(i));
-				}
-				
-			}
-			
+				}	
+			}	
 		});
 		panel.add(search);
-		
-		
 		
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
 		    @Override
@@ -118,14 +109,19 @@ public class PoliticalTrackerTable extends JFrame  {
 		        int colT = table.columnAtPoint(evt.getPoint());
 		        if (colT == 3) {
 		        	//Author clicked!!!
-		            System.out.println(table.getValueAt(rowT, colT));
+		        	frame.dispose();
+		            new InfoScreen((String)table.getValueAt(rowT, colT), dbConnection, 3);
 		        }
 		        if (colT == 4) {
 		        	//Publisher clicked!!!
-		            System.out.println(table.getValueAt(rowT, colT));
+		        	frame.dispose();
+		        	new InfoScreen((String) table.getValueAt(rowT, colT), dbConnection, 4);
 		        }
 		        if(colT == 7) {
-		        	System.out.println("rate me called on title:"+ table.getValueAt(rowT, 0));
+		        	//Rate article clicked
+		        	frame.dispose();
+		        	new ScoreGUI((String) table.getValueAt(rowT, 0), (String) table.getValueAt(rowT, 4), (String)table.getValueAt(rowT, 3),
+		        			(String) table.getValueAt(rowT, 5), (String) table.getValueAt(rowT, 1));
 		        }
 		        
 		    }
@@ -145,7 +141,7 @@ public class PoliticalTrackerTable extends JFrame  {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new ScoreGUI();
+				new ScoreGUI(null, null, null, null, null);
 			}
 			
 		});

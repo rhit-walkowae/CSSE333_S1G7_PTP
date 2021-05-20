@@ -27,10 +27,11 @@ public class Scores {
 		this.connection = dbService.getConnected();
 	}
 	
-	public boolean AddScore(int number, String link, String authorFName, String authorLName, String publisher) {
+	public boolean AddScore(int number, String link, String authorFName, String authorLName, String publisher,
+			String title, String genre) {
 		try {
 			CallableStatement cs = null;
-			cs = this.connection.prepareCall("{ ? = call [dbo].[AddScore] (?, ?, ?, ?, ?, ?)}");
+			cs = this.connection.prepareCall("{ ? = call [dbo].[AddScore] (?, ?, ?, ?, ?, ?, ?, ?, ?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setInt(2, number);
 			cs.setString(3, link);
@@ -38,6 +39,9 @@ public class Scores {
 			cs.setString(5, authorLName);
 			cs.setString(6, publisher);
 			cs.setString(7, "saayeh06");
+			cs.setString(8, title);
+			cs.setString(9, genre);
+			cs.setDate(10, java.sql.Date.valueOf(java.time.LocalDate.now()));
 			cs.executeUpdate();
 			if(cs.getInt(1) != 1 && cs.getInt(1) != 2 && 
 					cs.getInt(1) != 3 && cs.getInt(1) != 4 && cs.getInt(1) != 5 && cs.getInt(1) != 6 && cs.getInt(1) != 7) {

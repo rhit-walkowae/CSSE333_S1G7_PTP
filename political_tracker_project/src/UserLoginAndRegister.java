@@ -28,10 +28,6 @@ public class UserLoginAndRegister {
 			this.dbService = dbService;
 		}
 
-//		public boolean useApplicationLogins() {
-//			return true;
-//		}
-		
 		public boolean login1(String username, String password) {
 			try {
 				Connection con = this.dbService.getConnection();
