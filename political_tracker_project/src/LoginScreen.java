@@ -53,11 +53,12 @@ public class LoginScreen extends JFrame{
 				
 				String user = userText.getText();
 				String password = new String(passwordText.getPassword());
-				if (logger.login1(user, password)) {
+				int ID = logger.login1(user, password);
+				if (ID >=0) {
 					JOptionPane.showMessageDialog(null,
 							" You logged in as user: " + user + ", with password: " + password + " \n");
 					frame.dispose();
-					new PoliticalTrackerTable();
+					new PoliticalTrackerTable(user,ID);
 				}				
 			}					
 		});

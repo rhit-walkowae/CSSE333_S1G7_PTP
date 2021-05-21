@@ -112,7 +112,7 @@ public class InfoScreen extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				dispose();
-				new PoliticalTrackerTable();
+				new PoliticalTrackerTable("null", 0);
 			} 
 				
 		});

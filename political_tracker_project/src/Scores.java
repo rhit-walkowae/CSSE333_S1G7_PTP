@@ -28,7 +28,7 @@ public class Scores {
 	}
 	
 	public boolean AddScore(int number, String link, String authorFName, String authorLName, String publisher,
-			String title, String genre) {
+			String title, String genre, String CriticUser) {
 		try {
 			CallableStatement cs = null;
 			cs = this.connection.prepareCall("{ ? = call [dbo].[AddScore] (?, ?, ?, ?, ?, ?, ?, ?, ?)}");
@@ -38,7 +38,7 @@ public class Scores {
 			cs.setString(4, authorFName);
 			cs.setString(5, authorLName);
 			cs.setString(6, publisher);
-			cs.setString(7, "saayeh06");
+			cs.setString(7, CriticUser);
 			cs.setString(8, title);
 			cs.setString(9, genre);
 			cs.setDate(10, java.sql.Date.valueOf(java.time.LocalDate.now()));
@@ -51,6 +51,7 @@ public class Scores {
 				return false;
 			}
 		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,e);
 			e.printStackTrace();
 			return false;
 		}

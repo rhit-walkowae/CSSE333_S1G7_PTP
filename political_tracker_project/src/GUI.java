@@ -15,6 +15,7 @@ public class GUI extends JFrame implements ActionListener {
 	private static JTextField emailText;
 	private static JPasswordField passwordText;
 	private String func;
+	private static JFrame frame;
 	//private boolean testGUI = true; set to true to just test guy set to false to test actual
 									// connectivity/functionality
 	static DatabaseConnection dbConnection = new DatabaseConnection();
@@ -29,11 +30,13 @@ public class GUI extends JFrame implements ActionListener {
 
 		// open login screen for returning users
 		if (this.func.equals("Login")) {
+			frame.dispose();
 			new LoginScreen(dbConnection);
 		}
 		
 		// open registration screen for new users
 		if (this.func.equals("Register")) {
+			frame.dispose();
 			new RegisterScreen(dbConnection);
 		}
 
@@ -42,7 +45,7 @@ public class GUI extends JFrame implements ActionListener {
 	public static void main(String[] args) {
 		dbConnection.getConnected();	
 		
-		JFrame frame = new JFrame();
+		frame = new JFrame();
 		frame.setSize(500, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		

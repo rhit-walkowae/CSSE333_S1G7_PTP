@@ -23,8 +23,8 @@ public class DatabaseConnection {
 		public Connection getConnected(){
 			
 			this.connectionUrl = this.connectionUrl
-					.replace("${userName}", "siahmasf")
-					.replace("${password}", "AustinTexas23!");
+					.replace("${userName}", "PoliTracApp30")
+					.replace("${password}", "Password123");
 
 	        try {
 	        	DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());

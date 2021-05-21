@@ -26,7 +26,7 @@ public class ScoreGUI extends JFrame{
 	static DatabaseConnection dbConnection = new DatabaseConnection();
 	private static Scores scoresCall = new Scores(dbConnection);
 	
-	public ScoreGUI(String titleBeingRated, String publisherBeingRated, String authorBeingRated, String genreOf, String linkOfArticle) {
+	public ScoreGUI(String titleBeingRated, String publisherBeingRated, String authorBeingRated, String genreOf, String linkOfArticle, String username, int uID) {
 		
 		this.setTitle("Add Score");
 		
@@ -96,10 +96,10 @@ public class ScoreGUI extends JFrame{
 						String[] parts = authorNames.split(" ");
 						String authorFName = parts[0];
 						String authorLName = parts[1];
-						scoresCall.AddScore(score, linkInput, authorFName, authorLName, pub, tit, gen);
+						scoresCall.AddScore(score, linkInput, authorFName, authorLName, pub, tit, gen,username);
 					}
 					dispose();
-					new PoliticalTrackerTable();
+					new PoliticalTrackerTable(username,uID);
 				} 
 				
 			});
@@ -129,10 +129,10 @@ public class ScoreGUI extends JFrame{
 						String[] parts = authorBeingRated.split(" ");
 						String authorFName = parts[0];
 						String authorLName = parts[1];
-						scoresCall.AddScore(score, linkOfArticle, authorFName, authorLName, publisherBeingRated, titleBeingRated, genreOf);
+						scoresCall.AddScore(score, linkOfArticle, authorFName, authorLName, publisherBeingRated, titleBeingRated, genreOf,username);
 					}
 					dispose();
-					new PoliticalTrackerTable();
+					new PoliticalTrackerTable(username,uID);
 				} 
 				
 			});
