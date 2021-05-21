@@ -169,7 +169,7 @@ public class PoliticalTrackerTable extends JFrame  {
 		        	//Rate article clicked
 		        	frame.dispose();
 		        	new ScoreGUI((String) table.getValueAt(rowT, 0), (String) table.getValueAt(rowT, 4), (String)table.getValueAt(rowT, 3),
-		        			(String) table.getValueAt(rowT, 5), (String) table.getValueAt(rowT, 1),username,ID);
+		        			(String) table.getValueAt(rowT, 5), (String) table.getValueAt(rowT, 1),(String) table.getValueAt(rowT, 2),username,ID);
 		        }
 		        
 		    }
@@ -189,7 +189,7 @@ public class PoliticalTrackerTable extends JFrame  {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new ScoreGUI(null, null, null, null, null,username, ID);
+				new ScoreGUI(null, null, null, null, null,null,username, ID);
 			}
 			
 		});

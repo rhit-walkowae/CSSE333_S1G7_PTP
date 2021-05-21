@@ -1,6 +1,13 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 
 public class DatabaseConnection {
@@ -19,12 +26,32 @@ public class DatabaseConnection {
 			this.connection = null;
 			
 		}
+		
+
 
 		public Connection getConnected(){
 			
-			this.connectionUrl = this.connectionUrl
-					.replace("${userName}", "PoliTracApp30")
-					.replace("${password}", "Password123");
+			//referenced https://mkyong.com/java/java-properties-file-examples/
+			try (InputStream input = new FileInputStream("src/political1.properties")) {
+
+	            Properties prop = new Properties();
+
+	            
+	            prop.load(input);
+
+	            // get the property value and print it out
+	            
+	            this.connectionUrl = this.connectionUrl
+						.replace("${userName}", prop.getProperty("db.username"))
+						.replace("${password}", prop.getProperty("db.password"));
+
+	           
+
+	        } catch (IOException io) {
+	            io.printStackTrace();
+	        }
+			
+			
 
 	        try {
 	        	DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());

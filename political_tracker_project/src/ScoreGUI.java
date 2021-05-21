@@ -20,13 +20,15 @@ public class ScoreGUI extends JFrame{
 	private JLabel author, title, link, publisher, rating, genre;
 	private JTextArea inputAuthor, inputTitle, inputLink, inputPublisher, inputGenre;
 	private JRadioButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10;
-	private JButton submit;
+	private JButton submit, goBack;
 	private JPanel panel;
+	private JLabel datePublished;
+	private JTextArea inputDate;
 	
 	static DatabaseConnection dbConnection = new DatabaseConnection();
 	private static Scores scoresCall = new Scores(dbConnection);
 	
-	public ScoreGUI(String titleBeingRated, String publisherBeingRated, String authorBeingRated, String genreOf, String linkOfArticle, String username, int uID) {
+	public ScoreGUI(String titleBeingRated, String publisherBeingRated, String authorBeingRated, String genreOf, String linkOfArticle,String dateP, String username, int uID) {
 		
 		this.setTitle("Add Score");
 		
@@ -37,10 +39,14 @@ public class ScoreGUI extends JFrame{
 		this.link = new JLabel("Link");
 		this.genre = new JLabel("Genre");
 		this.publisher = new JLabel("Publisher");
+		this.datePublished = new JLabel("Date");
 		this.rating = new JLabel("Rating");
 		
 		this.submit = new JButton("Submit");
-		this.submit.setBounds(140, 280, 300, 20);;
+		this.submit.setBounds(80, 280, 150, 20);;
+		
+		this.goBack = new JButton("Go Back");
+		this.goBack.setBounds(350, 280, 150, 20);
 		
 		ButtonGroup group = new ButtonGroup();
 		JPanel radioPanel = new JPanel();
@@ -74,6 +80,7 @@ public class ScoreGUI extends JFrame{
 			this.inputLink = new JTextArea();
 			this.inputGenre = new JTextArea();
 			this.inputPublisher = new JTextArea();
+			this.inputDate = new JTextArea("example:2012-08-01");
 			
 			
 			this.submit.addActionListener(new ActionListener() {
@@ -96,10 +103,10 @@ public class ScoreGUI extends JFrame{
 						String[] parts = authorNames.split(" ");
 						String authorFName = parts[0];
 						String authorLName = parts[1];
-						scoresCall.AddScore(score, linkInput, authorFName, authorLName, pub, tit, gen,username);
+						scoresCall.AddScore(score, linkInput, authorFName, authorLName, pub, tit, gen, username);
 					}
 					dispose();
-					new PoliticalTrackerTable(username,uID);
+					new PoliticalTrackerTable(username, uID);
 				} 
 				
 			});
@@ -112,6 +119,14 @@ public class ScoreGUI extends JFrame{
 			this.inputLink = new JTextArea(linkOfArticle);
 			this.inputGenre = new JTextArea(genreOf);
 			this.inputPublisher = new JTextArea(publisherBeingRated);
+			this.inputDate = new JTextArea(dateP);
+			
+			this.inputAuthor.setEditable(false);
+			this.inputTitle.setEditable(false);
+			this.inputLink.setEditable(false);
+			this.inputGenre.setEditable(false);
+			this.inputPublisher.setEditable(false);
+			this.inputDate.setEditable(false);
 			
 			this.submit.addActionListener(new ActionListener() {
 				
@@ -129,27 +144,38 @@ public class ScoreGUI extends JFrame{
 						String[] parts = authorBeingRated.split(" ");
 						String authorFName = parts[0];
 						String authorLName = parts[1];
-						scoresCall.AddScore(score, linkOfArticle, authorFName, authorLName, publisherBeingRated, titleBeingRated, genreOf,username);
+						scoresCall.AddScore(score, linkOfArticle, authorFName, authorLName, publisherBeingRated, titleBeingRated, genreOf, username);
 					}
 					dispose();
-					new PoliticalTrackerTable(username,uID);
+					new PoliticalTrackerTable(username, uID);
 				} 
 				
 			});
 		}
 		
+		this.goBack.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+				new PoliticalTrackerTable(username, uID);
+			}
+		});
+		
 		author.setBounds(20, 20, 100, 20);
 		title.setBounds(20, 60, 100, 20);
 		link.setBounds(20, 100, 100, 20);
 		publisher.setBounds(20, 140, 100, 20);
-		rating.setBounds(20, 180, 100, 20);
-		genre.setBounds(20, 220, 100, 20);
+		genre.setBounds(20, 180, 100, 20);
+		datePublished.setBounds(20,205,100,20);
+		rating.setBounds(20, 220, 100, 20);
 		
 		inputAuthor.setBounds(100, 20, 400, 20);
 		inputTitle.setBounds(100, 60, 400, 20);
 		inputLink.setBounds(100, 100, 400, 20);
-		inputGenre.setBounds(100, 180, 400, 20);
 		inputPublisher.setBounds(100, 140, 400, 20);
+		inputGenre.setBounds(100, 180, 400, 20);
+		inputDate.setBounds(100,205,400,20);
 		
 		panel.setBounds(50, 220, 500, 100);
 		
@@ -167,17 +193,22 @@ public class ScoreGUI extends JFrame{
 		radioPanel.add(b10);
 		
 		this.add(submit);
+		this.add(goBack);
 		
 		this.add(author);
 		this.add(title);
 		this.add(link);
 		this.add(publisher);
 		this.add(rating);
+		this.add(genre);
+		this.add(datePublished);
 		
 		this.add(inputAuthor);
 		this.add(inputTitle);
 		this.add(inputLink);
 		this.add(inputPublisher);
+		this.add(inputGenre);
+		this.add(inputDate);
 		
 		this.add(radioPanel);
 		this.add(panel);
@@ -187,5 +218,10 @@ public class ScoreGUI extends JFrame{
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	} 
+	
+	public static void main (String args[]) {
+		
+		new ScoreGUI(null, null, null, null, null,null, "null", 0);
+	}
 	
 }
