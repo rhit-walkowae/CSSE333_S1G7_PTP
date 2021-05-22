@@ -55,8 +55,8 @@ public class LoginScreen extends JFrame{
 				String password = new String(passwordText.getPassword());
 				int ID = logger.login1(user, password);
 				if (ID >=0) {
-					JOptionPane.showMessageDialog(null,
-							" You logged in as user: " + user + ", with password: " + password + " \n");
+//					JOptionPane.showMessageDialog(null,
+//							" You logged in as user: " + user + ", with password: " + password + " \n");
 					frame.dispose();
 					new PoliticalTrackerTable(user,ID);
 				}				

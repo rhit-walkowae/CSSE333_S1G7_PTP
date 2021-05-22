@@ -10,6 +10,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
@@ -99,11 +100,15 @@ public class ScoreGUI extends JFrame{
 							score = Integer.parseInt(button.getText());
 						}
 					}
+					try {
 					if(authorNames != null && linkInput != null && pub != null && score != 0) {
 						String[] parts = authorNames.split(" ");
 						String authorFName = parts[0];
 						String authorLName = parts[1];
 						scoresCall.AddScore(score, linkInput, authorFName, authorLName, pub, tit, gen, username);
+					}}
+					catch(ArrayIndexOutOfBoundsException e) {
+						JOptionPane.showMessageDialog(null, e);
 					}
 					dispose();
 					new PoliticalTrackerTable(username, uID);

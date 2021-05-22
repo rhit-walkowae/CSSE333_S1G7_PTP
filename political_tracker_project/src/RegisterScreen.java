@@ -64,8 +64,8 @@ public class RegisterScreen extends JFrame {
 				String email = emailText.getText();
 				int ID = logger.register(user, email, password);
 				if (ID >=0) {
-					JOptionPane.showMessageDialog(null,
-							" You registered a new user: " + user + ", with password: " + password + " \n");
+//					JOptionPane.showMessageDialog(null,
+//							" You registered a new user: " + user + ", with password: " + password + " \n");
 					new PoliticalTrackerTable(user,ID);
 				}
 			}
